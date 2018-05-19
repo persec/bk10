@@ -62,10 +62,9 @@ def train(csv_file):
     tb_callback = TensorBoard(log_dir='./logs', embeddings_freq=1)
 
     model = Sequential()
-    model.add(Embedding(num_words, 64, input_length=max_log_length))
+    model.add(Embedding(num_words, 128, input_length=max_log_length))
     model.add(Dropout(0.5))
-    # change from 64 > 128 / 22-4
-    model.add(LSTM(128, recurrent_dropout=0.5))
+    model.add(LSTM(256, recurrent_dropout=0.5))
     model.add(Dropout(0.5))
     model.add(Dense(1, activation='sigmoid'))
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -85,18 +84,14 @@ def train(csv_file):
         outfile.write(model.to_json())
     
     # Test model 
-    print "-----------------------------------------------"
-    print "Testing ..."
+    print "\n-------------------- Testing ---------------------------"
     prediction = model.predict(X_test)
-    #print "Prediction finish. "
-    #print prediction
-    #print Y_test 
     count = 0
     for i in range(len(prediction)):
         pred = 1 if prediction[i][0] >= 0.5 else 0 
         if Y_test[i] == pred:
             count += 1 
-    print "Test Accuracy:", count*1.0/len(prediction), "%"
+    print "Test Accuracy:", 100*count*1.0/len(prediction), "%"
 
 
 if __name__ == '__main__':
