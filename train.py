@@ -63,7 +63,7 @@ def train(csv_file):
 
     model = Sequential()
     model.add(Embedding(num_words, 128, input_length=max_log_length))
-    model.add(Dropout(0.5))
+    #model.add(Dropout(0.5))
     model.add(LSTM(256, recurrent_dropout=0.5))
     model.add(Dropout(0.5))
     model.add(Dense(1, activation='sigmoid'))
